@@ -1,5 +1,6 @@
 %!TEX root = Physics231.tex
 \chapter{Spring Theory}
+\label{ch:spring:theory}
 
 \begin{quote}
 \emph{Everything is a harmonic oscillator.}
@@ -613,8 +614,299 @@ where we recognize the speed of propagation $c^2 = k/m$.
 
 \section{Feynman}
 % Classical to quantum
-\flip{Classical to quantum, not just minimum, but the entire ensemble. }
+% \flip{Classical to quantum, not just minimum, but the entire ensemble. }
 
-The path integral is something that shows up in the `sum over histories' approach to quantum mechanics. It is used extensively in quantum field theory because it gives a powerful way to impose constraints on a quantum system using Lagrange multipliers. What is not always obvious is that the path integral can be a more intuitive interpretation of the standard Euler--Lagrange approach. 
+The \textbf{path integral}\index{path integral} is something that shows up in the `sum over histories' approach to quantum mechanics. It is used extensively in quantum field theory because it gives a powerful way to impose constraints on a quantum system using Lagrange multipliers. What is not always obvious is that the path integral can be a more intuitive interpretation of the standard Euler--Lagrange approach. 
 
-\flip{Fold in quantum section here}
+\paragraph{Sum Over Histories}
+% 
+\flip{To be filled in. Please see the example in class of the $N$-slit experiment and the proposal that each path contributes $\e^{iS}$.}
+
+\begin{newrule}[Sum over histories]
+Given some observed initial state $\ket{\text{in}}$ and some observed final state $\ket{\text{out}}$, the amplitude to go from $\ket{\text{in}}$ to $\ket{\text{out}}$ is
+\begin{align}
+    \mathcal M(\text{in}\to\text{out})= 
+    \sum_\textnormal{path} \e^{iS_\textnormal{path}} \ ,
+\end{align}
+where the sum is over all `paths' (histories) that permit the initial state to evolve into the final state. $S_\textnormal{path}$ is the action for a given path---the same action that you are used to from classical mechanics, the time integral over the Lagrangian, $S= \int \D{t}\, L$.
+\end{newrule}
+
+\paragraph{Path Integral}
+Suppose a quantum state has initial and final positions\sidenote{We deliberate use the notation $q$ for position instead of $x$. This is to aid our transition to quantum \emph{field theory}. Old textbooks sometimes refer to \emph{second quantization}; it is precisely to distinguish the role of $q$, a field displacement, and $x$ a continuous field index indicating spacetime position.}
+\begin{align}
+    \ket{\textnormal{in}} &= \ket{q_0}
+    &
+    \ket{\textnormal{out}} &= \ket{q_T} \ .
+\end{align}
+These are labeled so that we observe $\ket{q_0}$ at time $t=0$ and we observe $\ket{q_T}$ at time $t=T$. The amplitude to go from $\ket{q_0} \to \ket{q_T}$ over the time interval $T$ is
+\begin{align}
+    \bra{q_T} \hat U(T) \ket{q_0} &= \bra{q_T} \e^{-iT\hat H} \ket{q_0} \ .
+\end{align}
+Here $\hat U(t)$ is the operator that evolves states over time $t$. As you know from quantum mechanics, the Hamiltonian $\hat H$, is the operator that enacts infinitesimal evolution in time. This means that we enact finite time translations by exponentiating the Hamiltonian.\sidenote{Please make sure you are familiar with this idea: Hermitian operators \emph{generate} infinitesimal changes to a system. The exponential of these Hermitian operators are unitary operators that enact finite transformations. The idea shows up over and over again in this class.}
+
+There are two tricks to deploy at this step:
+\begin{enumerate}
+    \item Break the finite time evolution operator into a product of $(N+1)$ time evolutions:
+    \begin{align}
+        \hat U(T) = \hat U(\Delta t)\hat U(\Delta t)\cdots \hat U(\Delta t) \ .
+    \end{align}
+    It is \emph{obvious} that $\hat U(t)\hat U(s) = \hat U(t+s)$.
+    \item Insert the identity as a sum over a complete set of intermediate states:
+    \begin{align}
+        \one &= \int \D{q_i}\, \ket{q_i}\!\bra{q_i} \ .
+    \end{align}
+    We insert a copy of the identity in-between each of the $U(\Delta t)$s. Thus the label $i$ runs from $1$ to $N$.
+\end{enumerate}
+\begin{exercise}
+Confirm that $\hat U(t)\hat U(s) = \hat U(t+s)$. \textsc{Hint}: this is trivial, but convince yourself that it is trivial.
+\end{exercise}
+
+Applying these two tricks to our amplitude\sidenote{$\D[N]{\vec{q}} \defeq \D{q_1}\cdots\D{q_N}$} 
+\begin{align}
+    \bra{q_T} \hat U(T) \ket{q_0} 
+    &= \int \D[N]{\vec{q}} \,
+    \bra{q_T} \hat U(\Delta T) \ket{q_N}
+    \bra{q_N}\hat U(\Delta T) \ket{q_{N-1}}\cdots 
+    \\
+    &=\int \D[N]{\vec{q}} \,
+    \prod_i^{N+1} K_i \ , \label{eq:path:integral:time:evolution:product:of:Ks}
+\end{align}
+where the factor $K_i$ is a complex number:
+\begin{align}
+    K_i &\defeq \bra{q_{i}} \hat U(\Delta T) \ket{q_{i-1}} \ ,
+\end{align}
+where we define $\bra{q_{N+1}} = \bra{q_T}$. We have reduced the amplitude to go from our initial state to our final state to a product of $K_i$. The form of $K_i$ is simply that of the amplitude to go from $\ket{q_{i-1}}$ to $\ket{q_{i}}$ over a small time $\Delta t$. The integral over intermediate states $\D[N]{\vec{q}}$ tells us that we are summing over all possible configurations of those unobserved intermediate states. 
+
+In order to evaluate $K_i$, let us remind ourselves of the form of the Hamiltonian in $U(\Delta T) = \exp(i\Delta T\hat H)$,
+\begin{align}
+    \hat H = \frac{\hat P^2}{2m} + V(\hat Q) \ ,
+\end{align}
+where we use the non-relativistic kinetic term $\frac{1}{2}m\dot q^2 = p^2/2m$ and an arbitrary potential $V(q)$ that only depends on the $q$ displacements, but not the momenta $p$. Because $\hat H$ is an operator, we write $\hat P$ for the momentum operator and $\hat Q$ for the position\sidenote{This `position' is not necessarily spatial position. In general it is a displacement of a field value.} operator. All Hamiltonians in ordinary field theory have this type of separation: there is a \emph{kinetic term} that depends on momentum and a \emph{potential term} that depends on displacements. When we pass to relativistic theories, the kinetic term converts into a form that includes spatial derivatives in a way that it is Lorentz invariant. 
+
+Once again there is another silly trick. 
+\begin{enumerate}
+    \setcounter{enumi}{2}
+    \item Insert the momentum-space representation of the identity,
+    \begin{align}
+        \one &= \int \Dbar{p}\, \ket{p}\!\bra{p} 
+        &
+        \Dbar{p}\defeq \frac{\D{p}}{2\pi} \ .
+    \end{align}
+    Observe that this has a relative factor of $2\pi$ compared to the resolution of the `position space' identity. This is the famous---and seemingly inscrutable---factor that shows up in the Fourier transform, see Appendix~\ref{app:Fourier}.\sidenote{If you spend time thinking about this, you may wonder why we do not split the $2\pi$ evenly between positions and momenta. This would certainly be symmetric, but this choice ends up being fairly convenient in physics. It means, for example, that the conjugate variable for time is essentially the angular momentum, $E=\omega$.}\footnote{See e.g.\ \url{https://physics.stackexchange.com/a/141737/166736}} 
+\end{enumerate}
+Because $\hat H$ contains a term that evaluates easily in momentum space and a term that evaluates easily in position space, we insert the complete set of momentum states into $K_i$ to allow the $\hat P$-dependent terms to hit a $\bra{p}$ while the $Q$-dependent terms hit a $\ket{q_i}$:
+\begin{align}
+    K_i &=
+    \int \Dbar{p} \la {q_{i}} | p \ra \bra{p} \e^{-i\Delta t\frac{ \hat P^2}{2m}} \e^{-i\Delta tV(\hat Q)} \ket{q_{i-1}}
+    \label{eq:path:integral:Ki:operator}
+    \\ &=
+    \int \Dbar{p} \, \e^{-i\Delta t\frac{ p^2}{2m}} \e^{-i\Delta tV(q_{i-1})}\,  \la {q_{i}} | p \ra \la p | q_{i-1} \ra  \ .
+    \label{eq:path:integral:Ki:eigen}
+\end{align}
+The factors on the right are simply the Fourier components between the position and momentum eigenstates:
+\begin{align}
+    \la {q_{i}} | p \ra &= \e^{-ipq_i}
+    &
+    \la p | q_{i-1} \ra &= \e^{+ipq_{i-1}}
+    \ .
+\end{align}
+Plugging this into $K_i$ gives
+\begin{align}
+    K_i &=
+    \e^{-i\Delta tV(q_{i-1})} \int \Dbar{p} \, \e^{-i\Delta t\frac{ p^2}{2m} - i p(q_i - q_{i-1}) } \ .
+\end{align}
+If you do not worry\sidenote{%
+    Will not worry. On the other hand, you may want to worry about whether the assumptions we made to solve these Gaussian integrals is still valid when there are complex coefficients. This scratches the surface of why some mathematicians are skeptical about whether anything we do in quantum field theory is well posed.} 
+about the factors of $i$, then this integral is precisely in the form of a Gaussian with a source term. This has a known solution:
+\begin{align}
+    G_{a,J} \equiv \int \D{x}\; e^{-\frac{a}{2}x^2 + Jx} = \sqrt{\frac{2\pi}{a}}  e^{\frac{J^2}{2a}} \ .
+    % \tag{\ref{eq:Gaussian:with:source}}
+\end{align}
+We identify
+\begin{align}
+    a &= \frac{i\Delta t}{m}
+    &
+    J&= -i(q_i - q_{i-1}) \ .
+\end{align}
+Plugging in this result gives
+\begin{align}
+    K_i &=
+    \e^{-i\Delta tV(q_{i-1})} 
+    \frac{1}{2\pi}
+    \sqrt{\frac{2\pi m}{i \Delta t}}
+    \e^{\frac{-(q_i-q_{i-1})^2}{2i\Delta t/m}}
+    \\
+    &=
+    \sqrt{\frac{m}{i 2\pi \Delta t}}
+    \e^{\frac{i}{2}m\frac{(q_i-q_{i-1})^2}{\Delta t^2}\Delta t}
+    \e^{-iV(q_{i-1})\Delta t} 
+    \\
+    &= \mathcal N \e^{i\Delta t\, L[q_i]}
+    \label{eq:path:integral:infinitesmimal:kernel}
+     \ .
+\end{align}
+In the last line we have identified $(q_i-q_{i-1})/\Delta t = \dot q_i$ and observed that the argument of the combined exponential is simply $i\Delta t$ times the \emph{Lagrangian} at point $i$. The ugly square root is some complex constant factor that \emph{does not matter}. We simply write it as a normalization $\mathcal N$. 
+
+Now we insert this into the amplitude to go from our initial state to our final state, \eqref{eq:path:integral:time:evolution:product:of:Ks}:
+\begin{align}
+    \bra{q_T} \hat U(T) \ket{q_0} 
+    &= \mathcal N^{N+1} \int \D[N]{\vec{q}} \,
+    \e^{i \sum_i \Delta t\, L[q_i]} \ .
+\end{align}
+Recalling that $i$ encodes `time slices,' we recognize that the argument of the exponential is simply an \emph{integral} of the Lagrangian,
+\begin{align}
+    i \sum_i \Delta t\, L[q_i] \to i\int \D{t}\, L[q(t)] \equiv iS[q(t)] \ ,
+\end{align}
+where we have recovered the action. In the continuum limit, it is conventional to replace the notation $\D[N]{\vec{q}}$ with $\mathcal{D}q(t)$ so that our final expression for the $\Delta t \to 0$ limit is
+\begin{align}
+    \bra{q_T} \hat U(T) \ket{q_0} 
+    &= \mathcal N' \int \mathcal{D}q(t)\;
+    \e^{i S[q(t)]} \ .
+    \label{eq:path:integral:formalism}
+\end{align}
+Here $\mathcal N'$ is a re-packaging of the powers of $\mathcal N$. The integration over all trajectories $\mathcal {D}q(t)$ is called a \textbf{path integral}\index{path integral}.
+
+\begin{exercise}
+Why was it necessary for us to split $U(T)$ into several small steps? \textsc{Hint}: did we make any assumptions to go from \eqref{eq:path:integral:Ki:operator} to \eqref{eq:path:integral:Ki:eigen}? 
+\end{exercise}
+
+\paragraph{Recovering Lagrange}
+% \flip{To be filled in. Discussion of phasor diagrams, steepest descent, and why the classical path dominates. Motivates the principle of least action as the $\hbar \to 0$ limit.}
+The path integral formulation limits to the classical equation of motion in the limit $\hbar \to 0$. 
+\begin{exercise}
+Show that the $\hbar \to 0$ limit reduces to the standard Euler--Lagrange equation of motion for a classical system. You can argue heristically using a tool called \textbf{phasor diagrams}, though a more technical derivation will take the leading order terms in an expansion in $\hbar$.
+\end{exercise}
+
+
+\paragraph{Recovering Schr\"odinger}
+This section is outside the primary scope of the class. However, I encourage you to at least skim it to see an alternative explanation of where the Schr\"odinger equations comes from. It should convince you that the sum over histories (path integral) construction gives you the same dynamics as before. 
+% 
+% 
+We show that the Schr\"odinger equation appears as the single-particle, non-relativistic limit over the path integral formalism.\sidenote{This section draws from the excellent pedagogical article by David Derbes in the \emph{American Journal of Physics} (one of my favorite publications) in 1996. This artcile was selected as one of the Fermat's Library journal club articles.\footnotemark}\footnotetext{\cite{10.1119/1.18114}; \url{https://fermatslibrary.com/s/feynmans-derivation-of-the-schrodinger-equation}} The power of the path integral formalism is that it generalizes beyond non-relativistic quantum mechanics. Like with all new theoretical formalisms, it behooves one to confirm that the new formalism is mathematically equivalent to the established formalism in the appropriate limit.
+
+Suppose we interpret $q(t)$ as the position of a non-relativistic particle at time $t$. Then in this basis, we can think of the amplitude $\la q_t | \hat U(t) | q_0 \ra$ as the wavefunction $\psi(q, t)$ for the particle to be in position $q$ at time $t$ given some initial state $\ket{q_0}$ at $t=0$. We can rewrite \eqref{eq:path:integral:time:evolution:product:of:Ks} as follows:
+\begin{align}
+    \psi(q,t) &= \la q_t | \hat U(t) | q_0 \ra 
+    \\&= \int \D{q_N} \, K_{\!N} \int \D[N-1]{\vec{q}} \,
+    \prod_i^{N} K_i 
+    \\
+    &= \int \D{q'} \, K_{\!N}\, \psi(q',t-\Delta t) \ .
+\end{align}
+We have relabeled $q_N \to q'$. It is the last displacement variable that we integrate over. In fact, for convenience,\sidenote{You do not have to do this step.} let us shift all of our time coordinates by $\Delta t$: 
+\begin{align}
+    \psi(q,t+\Delta t) 
+    &= \int \D{q'} \, K_{\!N}\, \psi(q',t) \ .
+\end{align}
+This equation says that to go from the $(N-1)^\textnormal{th}$ step to the $N^\textnormal{th}$ step, you integrate the wavefunction at last position over all possible intermediate steps, weighted by the \emph{kernel},\sidenote{Kernels are just fancy names for distributions, which are in turn fancy names for functions that are integrated over.} $K_N$. We can now use the form of the kernel, \eqref{eq:path:integral:infinitesmimal:kernel}:
+\begin{align}
+    K_{\!N} &= \mathcal N \e^{i\Delta t\, L[q_i]}
+    &
+    \mathcal N = \sqrt{\frac{m}{2\pi i \Delta t}} \ .
+    \label{eq:path:integral:normalization}
+\end{align}
+Let us now be careful with the scaling with the small time slice $\Delta t$:
+\begin{align}
+    i\Delta t L[q_i] = \frac{im}{2}\frac{(q_i-q_{i-1})^2}{\Delta t} - i\Delta t V(\bar q) \ .
+\end{align}
+Note that the kinetic term goes like $\Delta t^{-1}$, which is \emph{large}. The potential term scales linearly with $\Delta t$, so it is small. We write $V(\bar q)$ to mean the average value of $V$ in the interval $(q_{i-1}, q_i)$. For our purposes, $\bar q = q$ assuming a sufficiently smooth potential. This means we can Taylor expand the potential term, but not the kinetic term:
+\begin{align}
+    \psi(q,t+\Delta t) &= \mathcal N\int \D{q'}\; 
+    \e^{\frac{im}{2}\frac{(q-q')^2}{\Delta t}} 
+    \left[1 - i\Delta t \, V(\bar q)\right]\,
+    \psi(q',t) \ .
+\end{align}
+We drop higher order terms in $\Delta t$.
+Now we assume that $q= q' + \xi$ and make the plausible case that $\xi$ is small.\sidenote{To be clear, we integrate over even large values of $\xi$. The sin that I am sweeping under the rug is the idea that the rapidly varying oscillation in the $\e^{\textnormal{kinetic}}$ term will cause integrants with large values of $\xi$ to cancel. This is the steepest descent method in the method of phasors.} This means we can also replace $\bar q \to q$ to leading order.
+We can then expand $\psi(q',t)$, where we shall suppress the $t$ argument so that spatial derivatives are clear:
+\begin{align}
+    \psi(q') = \psi(q) -\xi \psi'(q) + \frac{1}{2}\xi^2 \psi''(q) + \cdots \ .
+\end{align}
+To be clear: we now write $\psi'(q,t)$ to mean $\frac{\D{}}{\D{q}}\psi(q,t)$.
+Plugging this in:
+\begin{wide}
+\begin{align}
+    \psi(q,t+\Delta t) &= 
+    \mathcal N\int \D{\xi}\; 
+    \e^{\frac{im}{2}\frac{\xi^2}{\Delta t}} 
+    \left[1 - i\Delta t \, V(q)\right]\,
+    % \\
+    % &\phantom{=
+    % \mathcal N\int \D{\xi}\; 
+    % }\times 
+    \left[\psi(q,t) -\xi \psi'(q,t) + \frac{1}{2}\xi^2 \psi''(q,t)\right] 
+    \\
+    % &= 
+    % \mathcal N\int \D{\xi}\; 
+    % \e^{\frac{im}{2}\frac{\xi^2}{\Delta t}} 
+    % \left[1 - i\Delta t \, V(\bar q)\right] \psi(q,t)
+    % \\
+    % &\phantom{=}+
+    % \mathcal N\int \D{\xi}\; 
+    % \e^{\frac{im}{2}\frac{\xi^2}{\Delta t}} 
+    % \frac{1}{2}\xi^2 \psi''(q,t) \ .
+    &= 
+    \mathcal N\int \D{\xi}\; 
+    \e^{\frac{im}{2}\frac{\xi^2}{\Delta t}} 
+    \left[\psi(q,t) - i\Delta t \, V(q)\,\psi(q,t)
+    + \frac{1}{2}\xi^2 \psi''(q,t)
+    \right]
+    \ .
+ % \ . \nonumber
+ \label{eq:psi:path:integral:schrodinger:intermediate}
+\end{align}
+\end{wide}
+In the last line we removed the term linear in $\xi$ because it cancels against the rest of the integral, which is even in $\xi$. We also remove terms of order $\mathcal O(\Delta t\,\xi^2)$ since these are small. Observe that the $\xi$-independent terms in the bracket are simple Gaussian integrals:
+\begin{align}
+    \int \D{\xi}\; 
+    \e^{\frac{im}{2}\frac{\xi^2}{\Delta t}} 
+    = 
+    \sqrt{\frac{2\pi i\Delta t}{m}} = \mathcal{N}^{-1} \ .
+    \label{eq:path:integral:Gaussian:trick:1}
+\end{align}
+Observe that this factor exactly cancels the annoying normalization in \eqref{eq:path:integral:normalization}---but only for the $\xi$-independent terms in the bracket. The remaining term is a moment of the Gaussian integral. There happens to be a convenient trick for this by taking a derivative of 
+\begin{align}
+    G_{a,J} \equiv \int \D{x}\; e^{-\frac{a}{2}x^2 + Jx} = \sqrt{\frac{2\pi}{a}}  e^{\frac{J^2}{2a}} 
+    \tag{\ref{eq:Gaussian:with:source}} \ ,
+\end{align}
+where we see that
+\begin{align}
+    -2\frac{\D{G_{a,0}}}{\D{a}} &= \int \D{x}\; x^2 e^{-\frac{a}{2}x^2} 
+    = \frac{1}{a}\sqrt{\frac{2\pi}{a}} \ .
+    \label{eq:Gaussian:trick:diff:quad}
+\end{align}
+\begin{exercise}
+While the method above reconstructs even moments of the Gaussian integral, one can reconstruct all moments by taking derivatives with respect to the source, $J$. Show that you can reconstruct the second moment of the Gaussian integral, \eqref{eq:Gaussian:trick:diff:quad}, by taking two derivatives with respect to $J$. 
+\end{exercise}
+This gives us 
+\begin{align}
+    \int \D{\xi}\; \xi^2
+    \e^{\frac{im}{2}\frac{\xi^2}{\Delta t}} 
+    = 
+    \frac{1}{-im/\Delta t}
+    \sqrt{\frac{2\pi i\Delta t}{m}} 
+    =\frac{i\Delta t}{m} \mathcal{N}^{-1} \ .
+    \label{eq:path:integral:Gaussian:trick:2}
+\end{align}
+
+We can insert \eqref{eq:path:integral:Gaussian:trick:1} and \eqref{eq:path:integral:Gaussian:trick:2} into the expression for $\psi(q,t+\Delta t)$, \eqref{eq:psi:path:integral:schrodinger:intermediate}. The ugly factor of $\mathcal N$ conveniently cancels. We are left with:
+\begin{align}
+    \psi(q,t+\Delta t) &= \psi(q,t) - i \Delta t V(q)\, \psi(q,t) + \frac{i\Delta t}{2m} \psi''(q,t)
+\end{align}
+We can rearrange terms and recognize the time derivative:
+\begin{align}
+    \frac{\D{\psi(q,t)}}{\D{t}}
+    &= i\left[\frac{1}{2m}\left(\frac{\textnormal{d}}{\D{q}}\right)^2 - V(q)\right]\psi(q,t) \ ,
+\end{align}
+which we recognize as the Schr\"odinger equation. You can debate whether or not this counts as a `derivation' of the Schr\"odinger equation since we implicitly assumed the Schr\"odinger equation when writing the time evolution operator. However, if you instead took as a starting point the observation that each path is weighted by $\e^{iS[q(t)]}$, then one would recover the Schr\"odinger equation as a consequence. 
+
+
+
+
+
+
+
+
+\begin{exercise}
+Derive the same results by taking a time derivative of the continuous expression \eqref{eq:path:integral:formalism}. The steps are analogous, but this will test if you understand what the continuous expression means.
+\end{exercise}
+
