@@ -1,0 +1,26 @@
+\chapter{Entropy} 
+  % Baez
+
+  You may be familiar with the notion of \textbf{entropy}\index{entropy} from statistical mechanics\sidenote{You probably first heard about entropy in thermodynamics. I encourage you to derive the thermodynamical definition from the statistical definition},
+  \begin{align}
+    S = -\sum_i p_i \ln p_i \ ,
+  \end{align}
+  where the sum is over the number of microstate configurations and we have chosen sensible units where $k_\textnormal{B} =1$. 
+  \begin{example}
+  For the microcanonical ensemble, every allowed microstate is equally probably. That means that if there are $N$ possible microstates consistent with a macroscopic observation like energy conservation, then each microstate $i$ has probability $p_i = 1/N$. The entropy is thus
+  \begin{align}
+    S = -\frac{1}{N}\sum_i \ln \frac{1}{N} = \ln N \,
+  \end{align}
+  which is the logarithm of the number of microstates.
+  \end{example}
+  In statistical physics this is a good working definition: entropy is a measure of the unobserved microstates that are consistent with the observed macroscopic state. The most likely macroscopic state is the one with the most microstates. 
+
+  There is a more poetic way to phrase this idea that turns out to be even more useful. The entropy is a measure of information known about the system. A system with large entropy is one where you know comparatively little: an observed macrostate with large entropy is one where there are many possible microstates and you do not know which microstate the system is in at a given instant. A system with low entropy: say, a chunk of iron in its ferromagnetic phase, is one where you know very well that every microscopic spin is more-or-less aligned in a certain direction. In this way, \emph{entropy is a measure of information}.
+
+  This idea was formalized in what we now refer to as \textbf{information entropy}\index{information entropy} or \textbf{Shannon entropy}\index{Shannon entropy}. It is defined in exactly the same way up to a factor of $\ln 2$:
+  \begin{align}
+    S = -\sum_i p_i \log_2 p_1 \ ,
+  \end{align}
+  where the only difference is that the logarithm is now taken with base 2. THis is because in information theory we work with bits of binary information. The notion of information versus `physics' entropy are the same. They are so `the same' that I will use the same symbol for them. 
+
+
